@@ -1,1 +1,133 @@
-Jingo - Simulador Clínico (Signo de Ojos de Mapache)
+import React, { useState } from 'react';
+
+// Datos de ejemplo para la base de datos de semiología
+const semioData = [
+  {
+    id: 1,
+    categoria: "Cardiovascular",
+    titulo: "Dolor Precordial (Angina vs. IAM)",
+    descripcion: "Sensación opresiva retroesternal que puede irradiarse a cuello, mandíbula o brazo izquierdo.",
+    etiologia: "Isquemia miocárdica, disección aórtica, pericarditis.",
+    exploracion: "Evaluar pulsos periféricos, presión arterial en ambos brazos, ruidos cardíacos (S3, S4, frotes)."
+  },
+  {
+    id: 2,
+    categoria: "Respiratorio",
+    titulo: "Disnea",
+    descripcion: "Sensación subjetiva de falta de aire o dificultad respiratoria.",
+    etiologia: "Asma, EPOC, Insuficiencia Cardíaca Congestiva, Neumonía.",
+    exploracion: "Inspección de patrón respiratorio, auscultación de sibilancias, estertores o disminución de murmullo vesicular."
+  },
+  {
+    id: 3,
+    categoria: "Gastrointestinal",
+    titulo: "Dolor Abdominal Agudo",
+    descripcion: "Dolor visceral o somático en cavidad abdominal de reciente aparición.",
+    etiologia: "Apendicitis, colecistitis, úlcera péptica perforada, obstrucción intestinal.",
+    exploracion: "Palpación superficial y profunda, búsqueda de signos peritoneales (Blumberg, Rovsing, McBurney)."
+  },
+  {
+    id: 4,
+    categoria: "Neurológico",
+    titulo: "Cefalea",
+    descripcion: "Dolor o molestia en la región craneal o cervical superior.",
+    etiologia: "Migraña, cefalea tensional, hemorragia subaracnoidea (bandera roja).",
+    exploracion: "Examen de pares craneales, signos meníngeos (Rigidez de nuca, Brudzinski, Kernig)."
+  }
+];
+
+export default function SemioApp() {
+  const [busqueda, setBusqueda] = useState('');
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('Todas');
+  const [itemActivo, setItemActivo] = useState(null);
+
+  // Filtrar datos según búsqueda y categoría
+  const datosFiltrados = semioData.filter((item) => {
+    const coincideTexto = item.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
+                          item.descripcion.toLowerCase().includes(busqueda.toLowerCase());
+    const coincideCat = categoriaSeleccionada === 'Todas' || item.categoria === categoriaSeleccionada;
+    return coincideTexto && coincideCat;
+  });
+
+  const categorias = ['Todas', 'Cardiovascular', 'Respiratorio', 'Gastrointestinal', 'Neurológico'];
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-4 font-sans text-slate-800">
+      {/* Encabezado */}
+      <header className="max-w-2xl mx-auto mb-6 text-center">
+        <h1 className="text-3xl font-bold text-blue-600">SemioApp Médica</h1>
+        <p className="text-sm text-slate-500 mt-1">Guía rápida de semiología clínica y exploración</p>
+      </header>
+
+      {/* Buscador */}
+      <div className="max-w-2xl mx-auto mb-4">
+        <input
+          type="text"
+          placeholder="Buscar síntoma, signo o patología..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="w-full px-4 py-3 rounded-xl border border-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+        />
+      </div>
+
+      {/* Filtros por Categoría */}
+      <div className="max-w-2xl mx-auto flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-none">
+        {categorias.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setCategoriaSeleccionada(cat)}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+              categoriaSeleccionada === cat
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {/* Listado de Síntomas / Signos */}
+      <main className="max-w-2xl mx-auto space-y-3">
+        {datosFiltrados.length === 0 ? (
+          <p className="text-center text-slate-400 py-8">No se encontraron resultados.</p>
+        ) : (
+          datosFiltrados.map((item) => (
+            <div
+              key={item.id}
+              onClick={() => setItemActivo(item === itemActivo ? null : item)}
+              className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 cursor-pointer hover:shadow-md transition-all"
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-600">
+                    {item.categoria}
+                  </span>
+                  <h2 className="text-lg font-bold text-slate-800 mt-1">{item.titulo}</h2>
+                </div>
+                <span className="text-slate-400 text-sm">
+                  {item === itemActivo ? '▲' : '▼'}
+                </span>
+              </div>
+              <p className="text-sm text-slate-600 mt-2">{item.descripcion}</p>
+
+              {/* Vista expandida con detalles clínicos */}
+              {item === itemActivo && (
+                <div className="mt-4 pt-4 border-t border-slate-100 space-y-3 text-sm animate-fadeIn">
+                  <div>
+                    <span className="font-semibold text-slate-700">Etiología Principal:</span>
+                    <p className="text-slate-600">{item.etiologia}</p>
+                  </div>
+                  <div>
+                    <span className="font-semibold text-slate-700">Claves de Exploración Física:</span>
+                    <p className="text-slate-600">{item.exploracion}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))
+        )}
+      </main>
+    </div>
+  );
+}
