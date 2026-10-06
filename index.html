@@ -1,133 +1,337 @@
-import React, { useState } from 'react';
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signo de Ojos de Mapache - Semiología Médica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @keyframes pulseSlow {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.03); opacity: 1; }
+        }
+        .animate-pulse-slow { animation: pulseSlow 3s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-teal-500 selection:text-white">
 
-// Datos de ejemplo para la base de datos de semiología
-const semioData = [
-  {
-    id: 1,
-    categoria: "Cardiovascular",
-    titulo: "Dolor Precordial (Angina vs. IAM)",
-    descripcion: "Sensación opresiva retroesternal que puede irradiarse a cuello, mandíbula o brazo izquierdo.",
-    etiologia: "Isquemia miocárdica, disección aórtica, pericarditis.",
-    exploracion: "Evaluar pulsos periféricos, presión arterial en ambos brazos, ruidos cardíacos (S3, S4, frotes)."
-  },
-  {
-    id: 2,
-    categoria: "Respiratorio",
-    titulo: "Disnea",
-    descripcion: "Sensación subjetiva de falta de aire o dificultad respiratoria.",
-    etiologia: "Asma, EPOC, Insuficiencia Cardíaca Congestiva, Neumonía.",
-    exploracion: "Inspección de patrón respiratorio, auscultación de sibilancias, estertores o disminución de murmullo vesicular."
-  },
-  {
-    id: 3,
-    categoria: "Gastrointestinal",
-    titulo: "Dolor Abdominal Agudo",
-    descripcion: "Dolor visceral o somático en cavidad abdominal de reciente aparición.",
-    etiologia: "Apendicitis, colecistitis, úlcera péptica perforada, obstrucción intestinal.",
-    exploracion: "Palpación superficial y profunda, búsqueda de signos peritoneales (Blumberg, Rovsing, McBurney)."
-  },
-  {
-    id: 4,
-    categoria: "Neurológico",
-    titulo: "Cefalea",
-    descripcion: "Dolor o molestia en la región craneal o cervical superior.",
-    etiologia: "Migraña, cefalea tensional, hemorragia subaracnoidea (bandera roja).",
-    exploracion: "Examen de pares craneales, signos meníngeos (Rigidez de nuca, Brudzinski, Kernig)."
-  }
-];
-
-export default function SemioApp() {
-  const [busqueda, setBusqueda] = useState('');
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('Todas');
-  const [itemActivo, setItemActivo] = useState(null);
-
-  // Filtrar datos según búsqueda y categoría
-  const datosFiltrados = semioData.filter((item) => {
-    const coincideTexto = item.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
-                          item.descripcion.toLowerCase().includes(busqueda.toLowerCase());
-    const coincideCat = categoriaSeleccionada === 'Todas' || item.categoria === categoriaSeleccionada;
-    return coincideTexto && coincideCat;
-  });
-
-  const categorias = ['Todas', 'Cardiovascular', 'Respiratorio', 'Gastrointestinal', 'Neurológico'];
-
-  return (
-    <div className="min-h-screen bg-slate-50 p-4 font-sans text-slate-800">
-      {/* Encabezado */}
-      <header className="max-w-2xl mx-auto mb-6 text-center">
-        <h1 className="text-3xl font-bold text-blue-600">SemioApp Médica</h1>
-        <p className="text-sm text-slate-500 mt-1">Guía rápida de semiología clínica y exploración</p>
-      </header>
-
-      {/* Buscador */}
-      <div className="max-w-2xl mx-auto mb-4">
-        <input
-          type="text"
-          placeholder="Buscar síntoma, signo o patología..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          className="w-full px-4 py-3 rounded-xl border border-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-        />
-      </div>
-
-      {/* Filtros por Categoría */}
-      <div className="max-w-2xl mx-auto flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-none">
-        {categorias.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setCategoriaSeleccionada(cat)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-              categoriaSeleccionada === cat
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      {/* Listado de Síntomas / Signos */}
-      <main className="max-w-2xl mx-auto space-y-3">
-        {datosFiltrados.length === 0 ? (
-          <p className="text-center text-slate-400 py-8">No se encontraron resultados.</p>
-        ) : (
-          datosFiltrados.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setItemActivo(item === itemActivo ? null : item)}
-              className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 cursor-pointer hover:shadow-md transition-all"
-            >
-              <div className="flex justify-between items-start">
+    <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center font-bold text-xl shadow-lg shadow-teal-500/30">
+                    🩺
+                </div>
                 <div>
-                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-600">
-                    {item.categoria}
-                  </span>
-                  <h2 className="text-lg font-bold text-slate-800 mt-1">{item.titulo}</h2>
+                    <h1 class="font-bold text-base md:text-lg text-white">Semiología Médica Avanzada</h1>
+                    <p class="text-xs text-teal-400">Módulo: Exploración Neurológica y Trauma</p>
                 </div>
-                <span className="text-slate-400 text-sm">
-                  {item === itemActivo ? '▲' : '▼'}
-                </span>
-              </div>
-              <p className="text-sm text-slate-600 mt-2">{item.descripcion}</p>
-
-              {/* Vista expandida con detalles clínicos */}
-              {item === itemActivo && (
-                <div className="mt-4 pt-4 border-t border-slate-100 space-y-3 text-sm animate-fadeIn">
-                  <div>
-                    <span className="font-semibold text-slate-700">Etiología Principal:</span>
-                    <p className="text-slate-600">{item.etiologia}</p>
-                  </div>
-                  <div>
-                    <span className="font-semibold text-slate-700">Claves de Exploración Física:</span>
-                    <p className="text-slate-600">{item.exploracion}</p>
-                  </div>
-                </div>
-              )}
             </div>
-          ))
-        )}
-      </main>
-    </div>
-  );
-}
+            <div class="flex items-center space-x-2 bg-slate-800/80 px-3.5 py-1.5 rounded-full border border-slate-700 text-xs font-medium">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                <span class="text-slate-300">Caso Clínico Activo</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8 w-full flex-grow flex flex-col justify-center">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Columna Izquierda: Explicación Semiológica e Ilustración Interactiva -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- Tarjeta Visual del Signo -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-rose-500/10 border-b border-l border-rose-500/20 px-3 py-1 rounded-bl-xl text-xs font-semibold text-rose-400">
+                        Signo de Alarma 🔴
+                    </div>
+
+                    <h2 class="text-xl font-bold text-white mb-2">Signo de Ojos de Mapache</h2>
+                    <p class="text-xs text-slate-400 mb-4">Equimosis periorbitaria bilateral simétrica</p>
+
+                    <!-- Ilustración Gráfica SVG -->
+                    <div class="w-full h-56 bg-slate-950/60 rounded-xl border border-slate-800/80 flex items-center justify-center p-2 relative group">
+                        <svg viewBox="0 0 200 200" class="w-48 h-48 drop-shadow-lg">
+                            <!-- Cabeza Base -->
+                            <circle cx="100" cy="100" r="72" fill="#f4a261" />
+                            <!-- Pelo oscuro -->
+                            <path d="M 35,95 Q 100,10 165,95 Q 165,45 100,30 Q 35,45 35,95" fill="#2d1b0d" />
+                            <!-- Orejas -->
+                            <circle cx="32" cy="105" r="9" fill="#e08e45" />
+                            <circle cx="168" cy="105" r="9" fill="#e08e45" />
+
+                            <!-- Ojos de Mapache (Equimosis violácea periorbitaria característica) -->
+                            <ellipse cx="68" cy="92" rx="17" ry="13" fill="#6b21a8" opacity="0.9" class="animate-pulse-slow" />
+                            <circle cx="68" cy="92" r="5" fill="#0f172a" />
+                            <circle cx="66" cy="90" r="1.5" fill="#ffffff" />
+
+                            <ellipse cx="132" cy="92" rx="17" ry="13" fill="#6b21a8" opacity="0.9" class="animate-pulse-slow" />
+                            <circle cx="132" cy="92" r="5" fill="#0f172a" />
+                            <circle cx="130" cy="90" r="1.5" fill="#ffffff" />
+
+                            <!-- Nariz -->
+                            <polygon points="100,95 94,118 106,118" fill="#d97706" />
+                            <!-- Boca neutra -->
+                            <path d="M 82,142 Q 100,152 118,142" stroke="#9a3412" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                        </svg>
+
+                        <div class="absolute bottom-2 text-center bg-slate-900/90 px-3 py-1 rounded-lg border border-slate-800 text-[11px] text-teal-300 font-medium">
+                            Simulación Semiológica Visual
+                        </div>
+                    </div>
+
+                    <div class="mt-4 space-y-2 text-xs text-slate-300 leading-relaxed">
+                        <p><strong class="text-white">Fisiopatología:</strong> Hemorragia originada por una fractura de la base del cráneo (fosa anterior) que diseca los tejidos laxos periorbitarios.</p>
+                        <p><strong class="text-white">Diferencia clave:</strong> A diferencia del "ojo morado" común por golpe directo, este signo es <em>bilateral</em> y no suele asociarse a traumatismo ocular directo en la órbita.</p>
+                    </div>
+                </div>
+
+                <!-- Estadísticas de Aciertos/Fallos -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl grid grid-cols-3 gap-3 text-center">
+                    <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800">
+                        <span class="block text-xs text-slate-400">Aciertos</span>
+                        <span id="stat-correct" class="text-xl font-bold text-emerald-400">0</span>
+                    </div>
+                    <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800">
+                        <span class="block text-xs text-slate-400">Errores</span>
+                        <span id="stat-incorrect" class="text-xl font-bold text-rose-400">0</span>
+                    </div>
+                    <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800">
+                        <span class="block text-xs text-slate-400">Progreso</span>
+                        <span id="stat-progress" class="text-xl font-bold text-teal-400">1/4</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Columna Derecha: Sistema de Preguntas y Evaluación Interactiva -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-xl relative">
+                    
+                    <!-- Indicador de Pregunta Actual -->
+                    <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-800">
+                        <span id="question-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-teal-500/10 text-teal-400 border border-teal-500/20">
+                            Pregunta 1 de 4
+                        </span>
+                        <div class="text-xs text-slate-400 font-medium">
+                            Evaluación de Competencias Clínicas
+                        </div>
+                    </div>
+
+                    <!-- Texto de la Pregunta -->
+                    <h3 id="question-text" class="text-lg md:text-xl font-bold text-white mb-6 leading-snug">
+                        Cargando pregunta...
+                    </h3>
+
+                    <!-- Lista de Opciones -->
+                    <div id="options-container" class="space-y-3.5 mb-6">
+                        <!-- Generado dinámicamente -->
+                    </div>
+
+                    <!-- Caja de Retroalimentación Inmediata -->
+                    <div id="feedback-box" class="hidden p-4 rounded-xl border transition-all duration-300 mb-6">
+                        <div class="flex items-start space-x-3">
+                            <div id="feedback-icon" class="text-2xl flex-shrink-0"></div>
+                            <div>
+                                <h4 id="feedback-title" class="font-bold text-base"></h4>
+                                <p id="feedback-desc" class="text-sm mt-1 leading-relaxed text-slate-200"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botón Siguiente / Reiniciar -->
+                    <div class="flex justify-end">
+                        <button id="next-btn" onclick="nextQuestion()" class="hidden w-full md:w-auto px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-teal-600/30 flex items-center justify-center space-x-2">
+                            <span>Siguiente Pregunta</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="text-center py-6 text-xs text-slate-500 border-t border-slate-900 mt-8">
+        Plataforma Interactiva de Educación Médica • Signo de Ojos de Mapache Semiología
+    </footer>
+
+    <script>
+        const quizData = [
+            {
+                question: "¿Cuál es la sospecha clínica principal ante la presencia de equimosis periorbitaria bilateral (signo de ojos de mapache) tras un traumatismo craneal?",
+                options: [
+                    { text: "Fractura de la base del cráneo que compromete la fosa anterior.", correct: true },
+                    { text: "Hemorragia conjuntival aislada por rotura de capilares superficiales por llanto.", correct: false },
+                    { text: "Infección bacteriana aguda severa de los senos paranasales (celulitis).", correct: false },
+                    { text: "Contusión orbitaria directa por un golpe frontal de baja energía.", correct: false }
+                ],
+                explanation: "¡Correcto! El signo de ojos de mapache es clásico de la fractura de la base del cráneo en su fosa anterior. La sangre de la línea de fractura se filtra y diseca los tejidos periorbitarios."
+            },
+            {
+                question: "¿Por qué la equimosis en este signo característicamente respeta o se limita al borde del tabique orbitario?",
+                options: [
+                    { text: "Debido a una reacción alérgica localizada en los párpados superiores e inferiores.", correct: false },
+                    { text: "Porque el tabique orbitario (septo orbital) actúa como una barrera anatómica que contiene la sangre infiltrada.", correct: true },
+                    { text: "Porque el paciente presenta un edema linfático generalizado inducido por fármacos.", correct: false },
+                    { text: "Debido a la contracción refleja del músculo orbicular de los ojos durante el impacto.", correct: false }
+                ],
+                explanation: "¡Exacto! El septo orbital actúa como contención anatómica, impidiendo que la sangre disecada avance más allá de los rebordes orbitarios óseos, creando esa forma simétrica tan característica."
+            },
+            {
+                question: "¿Cuál de los siguientes signos semiológicos suele acompañar frecuentemente al signo de ojos de mapache en la fractura de base de cráneo?",
+                options: [
+                    { text: "Signo de Battle (equimosis retroauricular sobre la apófisis mastoides).", correct: true },
+                    { text: "Desviación marcada de la comisura labial por parálisis facial periférica idiopática.", correct: false },
+                    { text: "Aparición de ictericia generalizada en escleras en menos de 2 horas.", correct: false },
+                    { text: "Edema agudo de pulmón cardiogénico bilateral con estertores crepitantes.", correct: false }
+                ],
+                explanation: "¡Muy bien! El signo de Battle (equimosis en la región mastoidea retroauricular) es otro indicador clásico de fractura de base de cráneo (en este caso de fosa media)."
+            },
+            {
+                question: "Al realizar la anamnesis y exploración física, ¿qué hallazgo físico diferenciaría este signo de un simple 'ojo morado' por riña callejera?",
+                options: [
+                    { text: "La presencia exclusiva de dolor local intenso al parpadear sin compromiso sistémico.", correct: false },
+                    { text: "La bilateralidad simétrica sin antecedente de traumatismo directo sobre los globos oculares.", correct: true },
+                    { text: "La coloración amarillenta inmediata en el primer minuto posterior al golpe.", correct: false },
+                    { text: "La pérdida total de la visión bilateral reversible en segundos.", correct: false }
+                ],
+                explanation: "¡Correcto! Un hematoma orbitario común suele ser unilateral y producto de un golpe directo en la órbita. El signo de ojos de mapache suele ser bilateral y puede aparecer sin traumatismo ocular directo."
+            }
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let isAnswered = false;
+
+        function loadQuestion() {
+            isAnswered = false;
+            const q = quizData[currentIndex];
+            
+            document.getElementById('question-badge').innerText = `Pregunta ${currentIndex + 1} de ${quizData.length}`;
+            document.getElementById('question-text').innerText = q.question;
+            document.getElementById('stat-progress').innerText = `${currentIndex + 1}/${quizData.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/80 text-slate-200 text-sm md:text-base font-medium transition-all flex items-center justify-between group cursor-pointer";
+                btn.innerHTML = `
+                    <span class="pr-4">${opt.text}</span>
+                    <span class="w-7 h-7 rounded-full border border-slate-600 flex items-center justify-center text-xs text-slate-400 group-hover:border-teal-400 group-hover:text-teal-400 flex-shrink-0 transition-colors">?</span>
+                `;
+                btn.onclick = () => handleAnswer(opt.correct, btn, q.explanation);
+                container.appendChild(btn);
+            });
+
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+        }
+
+        function handleAnswer(isCorrect, selectedButton, explanation) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const allButtons = document.querySelectorAll('#options-container button');
+            allButtons.forEach(b => b.disabled = true);
+
+            const feedbackBox = document.getElementById('feedback-box');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackDesc = document.getElementById('feedback-desc');
+            const nextBtn = document.getElementById('next-btn');
+
+            feedbackBox.classList.remove('hidden');
+
+            if (isCorrect) {
+                correctCount++;
+                document.getElementById('stat-correct').innerText = correctCount;
+                
+                selectedButton.className = "w-full text-left p-4 rounded-xl bg-emerald-950/50 border border-emerald-500/50 text-emerald-100 text-sm md:text-base font-medium flex items-center justify-between shadow-lg shadow-emerald-950/30";
+                
+                feedbackBox.className = "p-4 rounded-xl border bg-emerald-950/70 border-emerald-500/40 text-emerald-100 shadow-xl";
+                feedbackIcon.innerHTML = "✅";
+                feedbackTitle.innerText = "¡Signo de Aprobación - Respuesta Correcta!";
+                feedbackDesc.innerText = explanation;
+            } else {
+                incorrectCount++;
+                document.getElementById('stat-incorrect').innerText = incorrectCount;
+                
+                selectedButton.className = "w-full text-left p-4 rounded-xl bg-rose-950/50 border border-rose-500/50 text-rose-100 text-sm md:text-base font-medium flex items-center justify-between shadow-lg shadow-rose-950/30";
+                
+                feedbackBox.className = "p-4 rounded-xl border bg-rose-950/70 border-rose-500/40 text-rose-100 shadow-xl";
+                feedbackIcon.innerHTML = "❌";
+                feedbackTitle.innerText = "Signo Negativo - Respuesta Incorrecta";
+                feedbackDesc.innerText = "Has seleccionado una opción errónea. " + explanation;
+            }
+
+            if (currentIndex < quizData.length - 1) {
+                nextBtn.querySelector('span:first-child').innerText = "Siguiente Pregunta";
+                nextBtn.classList.remove('hidden');
+            } else {
+                nextBtn.querySelector('span:first-child').innerText = "Ver Resumen Final";
+                nextBtn.classList.remove('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showFinalSummary();
+            }
+        }
+
+        function showFinalSummary() {
+            const card = document.querySelector('.lg\\:col-span-7 > div');
+            card.innerHTML = `
+                <div class="text-center py-8 space-y-6">
+                    <div class="inline-block p-4 bg-teal-500/20 rounded-full text-5xl mb-2 border border-teal-500/30">🏆</div>
+                    <h3 class="text-2xl font-bold text-white">¡Evaluación de Semiología Completada!</h3>
+                    <p class="text-slate-300 text-sm md:text-base max-w-md mx-auto leading-relaxed">
+                        Has completado el caso clínico sobre el <strong class="text-teal-400">Signo de Ojos de Mapache</strong>. Tu puntuación final es de <strong class="text-emerald-400">${correctCount} aciertos</strong> y <strong class="text-rose-400">${incorrectCount} errores</strong>.
+                    </p>
+                    <div class="bg-slate-950/80 p-5 rounded-xl border border-slate-800 text-left text-xs md:text-sm text-slate-300 space-y-2">
+                        <p class="font-semibold text-teal-300">💡 Perla Clínica Final:</p>
+                        <p>Recuerda siempre que la presencia de equimosis periorbitaria bilateral diferida sin traumatismo ocular directo es un signo capital de alerta para descartar fracturas de base de cráneo y posibles fugas de líquido cefalorraquídeo.</p>
+                    </div>
+                    <div>
+                        <button onclick="restartQuiz()" class="px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-teal-600/30 cursor-pointer">
+                            Reiniciar Evaluación
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            currentIndex = 0;
+            correctCount = 0;
+            incorrectCount = 0;
+            document.getElementById('stat-correct').innerText = correctCount;
+            document.getElementById('stat-incorrect').innerText = incorrectCount;
+            
+            // Reconstruir la estructura original del card de preguntas si se completó
+            location.reload();
+        }
+
+        window.onload = function() {
+            loadQuestion();
+        };
+    </script>
+</body>
+</html>
+```
+eof
+
+I have successfully generated the interactive medical semiology web application for the **Raccoon Eyes Sign**. It features a clean medical theme, a visual SVG graphic simulation of the sign, responsive layout, and an interactive quiz with instant green checkmark approval or red cross negative feedback along with clinical explanations.
